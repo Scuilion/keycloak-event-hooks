@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="oneal.kevin@gmail.com" id="001-webhook-create">
+
+        <createTable tableName="${TABLE_PREFIX}WEBHOOKS">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REALM_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EVENT_TYPE" type="VARCHAR(36)"/>
+            <column name="OPERATION_TYPE" type="VARCHAR(36)"/>
+            <column name="RESOURCE_TYPE" type="VARCHAR(36)"/>
+            <column name="CALLBACK_URL" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey constraintName="PK_${TABLE_PREFIX}WEBHOOKS" tableName="${TABLE_PREFIX}WEBHOOKS" columnNames="ID"/>
+
+        <createTable tableName="${TABLE_PREFIX}NOTIFICATIONS">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="WEBHOOK_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REALM_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTEMPTS" type="NUMBER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey constraintName="PK_${TABLE_PREFIX}NOTIFICATIONS" tableName="${TABLE_PREFIX}NOTIFICATIONS" columnNames="ID"/>
+        <addForeignKeyConstraint baseTableName="${TABLE_PREFIX}NOTIFICATIONS" baseColumnNames="WEBHOOK_ID" constraintName="FK_${TABLE_PREFIX}NOTIFICATIONS"
+                                 referencedTableName="${TABLE_PREFIX}WEBHOOKS" referencedColumnNames="ID"/>
+
+    </changeSet>
+
+</databaseChangeLog>
